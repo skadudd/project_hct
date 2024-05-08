@@ -1,3 +1,5 @@
+## 리커시브 대신 1,2,3 번갈아 가면서 row_number 매김
+
 WITH OrderedEvents AS (
   SELECT 
     Airbridge_Device_Id,
