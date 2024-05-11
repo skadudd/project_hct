@@ -1,0 +1,48 @@
+2024-05-11 15:22:20 [INFO] Question:  total_gmv 를 기준으로 유저를 구간화하고자 한다 
+2024-05-11 15:22:20 [INFO] Running PandasAI with openai LLM...
+2024-05-11 15:22:20 [INFO] Prompt ID: 2da3a9af-9516-4b7c-81bf-fae51b3b6634
+2024-05-11 15:22:20 [INFO] Executing Pipeline: GenerateChatPipeline
+2024-05-11 15:22:20 [INFO] Executing Step 0: ValidatePipelineInput
+2024-05-11 15:22:20 [INFO] Executing Step 1: CacheLookup
+2024-05-11 15:22:20 [INFO] Executing Step 2: PromptGeneration
+2024-05-11 15:22:20 [ERROR] Pipeline failed on step 2: 'Index' object has no attribute '_format_native_types'
+2024-05-11 15:22:55 [INFO] Question:  by total_gmv, cut dataframes by appropriate counts 
+2024-05-11 15:22:55 [INFO] Running PandasAI with openai LLM...
+2024-05-11 15:22:55 [INFO] Prompt ID: c00618e0-9afb-44ee-95eb-856ae5c51afb
+2024-05-11 15:22:55 [INFO] Executing Pipeline: GenerateChatPipeline
+2024-05-11 15:22:55 [INFO] Executing Step 0: ValidatePipelineInput
+2024-05-11 15:22:55 [INFO] Executing Step 1: CacheLookup
+2024-05-11 15:22:55 [INFO] Executing Step 2: PromptGeneration
+2024-05-11 15:22:55 [ERROR] Pipeline failed on step 2: 'Index' object has no attribute '_format_native_types'
+2024-05-11 15:24:16 [INFO] Question:  by total_gmv, cut dataframes by appropriate counts 
+2024-05-11 15:24:16 [INFO] Running PandasAI with openai LLM...
+2024-05-11 15:24:16 [INFO] Prompt ID: ee9f858f-2ba1-4581-aac3-e58e099f1b0c
+2024-05-11 15:24:17 [INFO] Executing Pipeline: GenerateChatPipeline
+2024-05-11 15:24:17 [INFO] Executing Step 0: ValidatePipelineInput
+2024-05-11 15:24:17 [INFO] Executing Step 1: CacheLookup
+2024-05-11 15:24:17 [INFO] Executing Step 2: PromptGeneration
+2024-05-11 15:24:17 [ERROR] Pipeline failed on step 2: 'Index' object has no attribute '_format_native_types'
+2024-05-11 15:26:39 [INFO] Question:  by total_gmv, cut dataframes by appropriate counts 
+2024-05-11 15:26:39 [INFO] Running PandasAI with openai LLM...
+2024-05-11 15:26:39 [INFO] Prompt ID: 3ffeb29b-cc0f-4e93-9f6e-464296635291
+2024-05-11 15:26:39 [INFO] Executing Pipeline: GenerateChatPipeline
+2024-05-11 15:26:39 [INFO] Executing Step 0: ValidatePipelineInput
+2024-05-11 15:26:39 [INFO] Executing Step 1: CacheLookup
+2024-05-11 15:26:39 [INFO] Executing Step 2: PromptGeneration
+2024-05-11 15:26:39 [ERROR] Pipeline failed on step 2: 'Index' object has no attribute '_format_native_types'
+2024-05-11 16:37:07 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-05-11 16:37:07 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-05-11 16:40:10 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-05-11 16:40:10 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-05-11 16:41:06 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-05-11 16:41:06 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-05-11 17:03:14 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-05-11 17:03:14 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-05-11 17:03:29 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-05-11 17:03:29 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-05-11 17:03:30 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-05-11 17:03:30 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-05-11 17:03:36 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-05-11 17:03:36 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-05-11 17:04:43 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2024-05-11 17:04:43 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
