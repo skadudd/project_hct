@@ -2,7 +2,7 @@
 with 
 v as (SELECT ID, Event_Category, d.Label as label, d.action as action, d.count as count, d.Value as value, Event_Date
 FROM `ballosodeuk.airbridge_mart.key_activity`, UNNEST(Detail) as d   
-WHERE Event_Date between "2024-04-03" and "2024-04-09"),
+WHERE Event_Date between "2024-04-03" and "2024-05-09"),
 
 # 각 피쳐 CTE 정의
 total_go_bf_list as (select ID, sum(count) as tap_go__bf_list
@@ -69,7 +69,7 @@ group by ID, Event_Category),
 visit_dates AS (
     SELECT ID, ARRAY_AGG(DISTINCT Event_Date ORDER BY Event_Date) AS visit_days
     FROM v
-    WHERE Event_Category = 'view_get__page (App)'
+    -- WHERE Event_Category = 'view_get__page (App)'
     GROUP BY ID
 ),
 
