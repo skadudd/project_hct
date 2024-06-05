@@ -2,7 +2,7 @@
 with 
 v as (SELECT ID, Event_Category, d.Label as label, d.action as action, d.count as count, d.Value as value, Event_Date
 FROM `ballosodeuk.airbridge_mart.key_activity`, UNNEST(Detail) as d
-WHERE Event_Date between "2024-04-01" and "2024-04-30"),
+WHERE Event_Date between "2024-05-01" and "2024-05-31"),
 
 #### 행동 CTE 정의
 # 각 피쳐 CTE 정의
@@ -55,7 +55,7 @@ group by ID, Event_Category),
 #신규
 rwd_bongtu as (select ID, sum(value) as bongtu_reward
 from v
-where Event_Category = "view_get__reward_done (App)" and label = '보너스봉투'
+where Event_Category = "view_get__reward_done (App)" and action = '보너스봉투'
 group by ID, Event_Category),
 
 #신규
