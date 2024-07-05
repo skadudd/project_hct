@@ -82,17 +82,6 @@ BEGIN
     FROM
       keys_extracted
   ),
-  --   unnested_keys AS (
-  --   SELECT
-  --     Event_Date, Event_Datetime, Cookie_ID,
-  --     Event_Category, Event_Label, Event_Action, Event_Value,
-  --     key,
-  --     extract_key_value(Semantic_Event_Properties, key) AS value
-  --     -- extract_key_value(Custom_Event_Properties, key) As value
-  --   FROM
-  --     filtered_keys,
-  --     UNNEST(filtered_keys.filtered_keys) AS key
-  -- ),
 
   unnested_semantic_keys AS (
     SELECT
@@ -155,46 +144,43 @@ BEGIN
       UNNEST(products) AS product
   ),
 
-  pivot_table AS (
+  products_struct AS (
     SELECT
       Event_Date, Event_Datetime, Cookie_ID,
-      Event_Category, Event_Label, Event_Action, Event_Value, Semantic_Event_Properties,
-      key, value
-    FROM
-      combined_keys
-    UNION ALL
-    SELECT
-      Event_Date, Event_Datetime, Cookie_ID,
-      Event_Category, Event_Label, Event_Action, Event_Value, Semantic_Event_Properties, 
-      'name' AS key, name AS value
-    FROM
-      products_unnested
-    UNION ALL
-    SELECT
-      Event_Date, Event_Datetime, Cookie_ID,
-      Event_Category, Event_Label, Event_Action, Event_Value, Semantic_Event_Properties, 
-      'price' AS key, price AS value
-    FROM
-      products_unnested
-    UNION ALL
-    SELECT
-      Event_Date, Event_Datetime, Cookie_ID,
-      Event_Category, Event_Label, Event_Action, Event_Value, Semantic_Event_Properties,
-      'position' AS key, position AS value
-    FROM
-      products_unnested
+      Event_Category, Event_Label, Event_Action, Event_Value,
+      ARRAY_AGG(STRUCT(name as name, price as price, position as position)) AS products,
+      min(Semantic_Event_Properties)
+    FROM products_unnested
+    GROUP BY Event_Date, Event_Datetime, Cookie_ID, Event_Category, Event_Label, Event_Action, Event_Value
   ),
   
-  pivotted_table AS (
+  pivot_table AS (
     SELECT *
-    FROM pivot_table
+    FROM combined_keys
     PIVOT (
       ANY_VALUE(value) FOR key IN %s
     )
+  ),
+
+  merged_table AS (
+    SELECT
+      *
+    FROM
+      pivot_table as table_1
+    LEFT JOIN 
+      products_struct as table_2
+      ON table_1.Event_Date = table_2.Event_Date AND 
+       table_1.Event_Datetime = table_2.Event_Datetime AND 
+       table_1.Cookie_ID = table_2.Cookie_ID AND
+       table_1.Event_Category = table_2.Event_Category AND
+       table_1.Event_Label = table_2.Event_Label AND
+       table_1.Event_Action = table_2.Event_Action AND
+       table_1.Event_Value = table_2.Event_Value
+    
   )
 
   select *
-  from products_unnested
+  from merged_table
 
 
   """, key_list);
