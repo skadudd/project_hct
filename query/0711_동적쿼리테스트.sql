@@ -42,9 +42,9 @@ BEGIN
             END AS Custom_Event_Properties,
             Semantic_Event_Properties
         FROM 
-            `airbridge_lake.temp_app`
+            `airbridge_lake.app_2024`
         WHERE
-            Event_Date = '2024-07-11'
+            Event_Date = '2024-07-13'
     ),
 
     keys_extracted AS (
@@ -88,9 +88,9 @@ BEGIN
             END AS Custom_Event_Properties,
             Semantic_Event_Properties
         FROM 
-            `airbridge_lake.temp_app`
+            `airbridge_lake.app_2024`
         WHERE
-            Event_Date = '2024-07-11'
+            Event_Date = '2024-07-13'
     ),
 
     keys_extracted AS (
@@ -144,8 +144,8 @@ BEGIN
             ELSE Custom_Event_Properties
         END AS Custom_Event_Properties,
         Semantic_Event_Properties
-    FROM `airbridge_lake.temp_app`
-    WHERE Event_Date = '2024-07-11'
+    FROM `airbridge_lake.app_2024`
+    WHERE Event_Date = '2024-07-13'
   ),
 
   # ---------------------------------------------------------------- #
@@ -312,7 +312,7 @@ BEGIN
         table_1.Is_First_Target_Event_per_Device, table_1.Target_Event_Timestamp, table_1.Target_Event_Category,
         table_1.Event_Category, table_1.Event_Label, table_1.Event_Action, table_1.Event_Value,
         table_1.Semantic_Event_Properties, table_1.Custom_Event_Properties,
-        table_2.products_struct AS products_struct_alias,
+        table_2.products_struct AS products_str,
         table_1.* EXCEPT (
           Event_Date, Event_Datetime, 
           Airbridge_Device_ID, Airbridge_Device_ID_Type, User_ID,
@@ -409,7 +409,7 @@ BEGIN
 
           # -- 이벤트 상세 구조체 생성. 2중 구조체 중 inner에 해당 -- #
           ARRAY_AGG(STRUCT( 
-            Event_Datetime as Timestamp ,Event_Label as Label, Event_Action as Action, Event_Value as Value, %s, products_struct_alias
+            Event_Datetime as Timestamp ,Event_Label as Label, Event_Action as Action, Event_Value as Value, %s, products_str
           )) AS d
       FROM order_table
       GROUP BY Event_Date, Airbridge_Device_ID, Airbridge_Device_ID_Type, Event_Category, Event_Label, Event_Action
@@ -421,7 +421,7 @@ BEGIN
   
   # -- 선언한 변수 사용 -- #
   """, key_list, struct_fields); 
-END;  
+END;
 
 
 
