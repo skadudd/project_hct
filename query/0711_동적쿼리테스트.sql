@@ -44,7 +44,7 @@ BEGIN
         FROM 
             `airbridge_lake.app_2024`
         WHERE
-            Event_Date = '2024-07-12'
+            Event_Date = '2024-07-14'
     ),
 
     keys_extracted AS (
@@ -90,7 +90,7 @@ BEGIN
         FROM 
             `airbridge_lake.app_2024`
         WHERE
-            Event_Date = '2024-07-12'
+            Event_Date = '2024-07-14'
     ),
 
     keys_extracted AS (
@@ -145,7 +145,7 @@ BEGIN
         END AS Custom_Event_Properties,
         Semantic_Event_Properties
     FROM `airbridge_lake.app_2024`
-    WHERE Event_Date = '2024-07-12'
+    WHERE Event_Date = '2024-07-14'
   ),
 
   # ---------------------------------------------------------------- #
