@@ -1,18 +1,18 @@
 # UDF 선언, JSON 파싱
 CREATE TEMP FUNCTION extract_key_value(json STRING, key STRING)
 RETURNS STRING
-LANGUAGE js AS """
+LANGUAGE js AS '''
   var obj = JSON.parse(json);
   return obj[key] || null;
-""";
+''';
 
 # UDF 선언, 키값 유무 조회
 CREATE TEMP FUNCTION has_key(json STRING, key STRING)
 RETURNS BOOL
-LANGUAGE js AS """
+LANGUAGE js AS '''
   var obj = JSON.parse(json);
   return obj.hasOwnProperty(key);
-""";
+''';
 
 # BEGIN ~ END
 BEGIN
@@ -31,7 +31,7 @@ BEGIN
         SELECT 
             Event_Date, Event_Datetime, 
             Airbridge_Device_ID, Airbridge_Device_ID_Type, User_ID,
-            Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
+            Channel, Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
             Device_Model, Device_Type, Platform, Client_IP_Country_Code, Client_IP_Subdivision, Client_IP_City, 
             Is_Re_engagement, Is_First_Event_per_User_ID, Is_First_Event_per_Device_ID,
             Is_First_Target_Event_per_Device, Target_Event_Timestamp, Target_Event_Category,
@@ -42,9 +42,9 @@ BEGIN
             END AS Custom_Event_Properties,
             Semantic_Event_Properties
         FROM 
-            `airbridge_lake.app_2024`
+            airbridge_lake.app_2024
         WHERE
-            Event_Date = '2024-07-14'
+            Event_Date =  DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
     ),
 
     keys_extracted AS (
@@ -77,7 +77,7 @@ BEGIN
         SELECT 
             Event_Date, Event_Datetime,
             Airbridge_Device_ID, Airbridge_Device_ID_Type, User_ID,
-            Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
+            Channel, Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
             Device_Model, Device_Type, Platform, Client_IP_Country_Code, Client_IP_Subdivision, Client_IP_City, 
             Is_Re_engagement, Is_First_Event_per_User_ID, Is_First_Event_per_Device_ID,
             Is_First_Target_Event_per_Device, Target_Event_Timestamp, Target_Event_Category,
@@ -88,9 +88,9 @@ BEGIN
             END AS Custom_Event_Properties,
             Semantic_Event_Properties
         FROM 
-            `airbridge_lake.app_2024`
+            airbridge_lake.app_2024
         WHERE
-            Event_Date = '2024-07-14'
+            Event_Date =  DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
     ),
 
     keys_extracted AS (
@@ -129,12 +129,15 @@ BEGIN
   # ---------------------------------------------------------------- #
   # !!!!!!!!!!! 다이나믹 피봇 쿼리 실행 Part
   # ---------------------------------------------------------------- #   
-  EXECUTE IMMEDIATE FORMAT("""
+  EXECUTE IMMEDIATE FORMAT('''
+
+  INSERT INTO `ballosodeuk.airbridge_mart.app_keyfeatures` 
+
   WITH json_table AS (
       SELECT 
         Event_Date, Event_Datetime, 
         Airbridge_Device_ID, Airbridge_Device_ID_Type, User_ID,
-        Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
+        Channel, Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
         Device_Model, Device_Type, Platform, Client_IP_Country_Code, Client_IP_Subdivision, Client_IP_City, 
         Is_Re_engagement, Is_First_Event_per_User_ID, Is_First_Event_per_Device_ID,
         Is_First_Target_Event_per_Device, Target_Event_Timestamp, Target_Event_Category,
@@ -144,8 +147,8 @@ BEGIN
             ELSE Custom_Event_Properties
         END AS Custom_Event_Properties,
         Semantic_Event_Properties
-    FROM `airbridge_lake.app_2024`
-    WHERE Event_Date = '2024-07-14'
+    FROM airbridge_lake.app_2024
+    WHERE Event_Date =  DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
   ),
 
   # ---------------------------------------------------------------- #
@@ -184,7 +187,7 @@ BEGIN
     SELECT
         Event_Date, Event_Datetime, 
         Airbridge_Device_ID, Airbridge_Device_ID_Type, User_ID,
-        Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
+        Channel, Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
         Device_Model, Device_Type, Platform, Client_IP_Country_Code, Client_IP_Subdivision, Client_IP_City, 
         Is_Re_engagement, Is_First_Event_per_User_ID, Is_First_Event_per_Device_ID,
         Is_First_Target_Event_per_Device, Target_Event_Timestamp, Target_Event_Category,
@@ -201,7 +204,7 @@ BEGIN
     SELECT
         Event_Date, Event_Datetime,
         Airbridge_Device_ID, Airbridge_Device_ID_Type, User_ID,
-        Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
+        Channel, Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
         Device_Model, Device_Type, Platform, Client_IP_Country_Code, Client_IP_Subdivision, Client_IP_City, 
         Is_Re_engagement, Is_First_Event_per_User_ID, Is_First_Event_per_Device_ID,
         Is_First_Target_Event_per_Device, Target_Event_Timestamp, Target_Event_Category,
@@ -222,7 +225,7 @@ BEGIN
     SELECT
         Event_Date, Event_Datetime, 
         Airbridge_Device_ID, Airbridge_Device_ID_Type, User_ID,
-        Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
+        Channel, Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
         Device_Model, Device_Type, Platform, Client_IP_Country_Code, Client_IP_Subdivision, Client_IP_City, 
         Is_Re_engagement, Is_First_Event_per_User_ID, Is_First_Event_per_Device_ID,
         Is_First_Target_Event_per_Device, Target_Event_Timestamp, Target_Event_Category,
@@ -236,7 +239,7 @@ BEGIN
     SELECT
         Event_Date, Event_Datetime, 
         Airbridge_Device_ID, Airbridge_Device_ID_Type, User_ID,
-        Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
+        Channel, Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
         Device_Model, Device_Type, Platform, Client_IP_Country_Code, Client_IP_Subdivision, Client_IP_City, 
         Is_Re_engagement, Is_First_Event_per_User_ID, Is_First_Event_per_Device_ID,
         Is_First_Target_Event_per_Device, Target_Event_Timestamp, Target_Event_Category,
@@ -267,7 +270,11 @@ BEGIN
       Event_Date, Event_Datetime, Airbridge_Device_ID, Event_Category, Event_Label, Event_Action, Event_Value,
       JSON_EXTRACT_SCALAR(product, '$.name') AS name,
       JSON_EXTRACT_SCALAR(product, '$.price') AS price,
-      JSON_EXTRACT_SCALAR(product, '$.position') AS position
+      JSON_EXTRACT_SCALAR(product, '$.position') AS position,
+      JSON_EXTRACT_SCALAR(product, '$.quantity') AS quantity,
+      JSON_EXTRACT_SCALAR(product, '$.productID') AS productID,
+      JSON_EXTRACT_SCALAR(product, '$.brandID') AS brandID,
+      JSON_EXTRACT_SCALAR(product, '$.currency') AS currency
     FROM
       product_keys_extracted,
       UNNEST(products) AS product
@@ -276,7 +283,8 @@ BEGIN
   products_struct AS (
     SELECT
       Event_Date, Event_Datetime, Airbridge_Device_ID, Event_Category, Event_Label, Event_Action, Event_Value,
-      ARRAY_AGG(STRUCT(name as name, price as price, position as position)) AS products_struct
+      ARRAY_AGG(STRUCT(name as name, price as price, position as position, quantity as quantity, 
+        productID as productID, brandID as brandID, currency as currency )) AS products_struct
     FROM products_unnested
     GROUP BY Event_Date, Event_Datetime, Airbridge_Device_ID, Event_Category, Event_Label, Event_Action, Event_Value
   ),
@@ -291,7 +299,12 @@ BEGIN
     SELECT *
     FROM combined_keys
     PIVOT (
-      ANY_VALUE(value) FOR key IN %s
+      ANY_VALUE(value) FOR key IN (
+        "Timestamp", "Label", "Action", "Value", "commission", "param", "challenge_id", "campaignType", "campaignName", "gettableCash", "quantity", 
+        "score", "position", "scheduleID", "type", "achievementID", "rate", "price", "tester", "incentive_product_name", "list_order", 
+        "contributionMargin", "sharedChannel",       
+        "listID", "transactionID", "brandID", "transactionPairedEventCategory", "originalContributionMargin", "productListID", "datetime", "place", "name", 
+        "totalQuantity", "productID", "transactionType","query", "isRenewal")
     )
   ),
 
@@ -306,7 +319,7 @@ BEGIN
     SELECT
         table_1.Event_Date, table_1.Event_Datetime, 
         table_1.Airbridge_Device_ID, table_1.Airbridge_Device_ID_Type, table_1.User_ID,
-        table_1.Campaign_ID, table_1.Ad_Group_ID, table_1.Ad_Creative_ID, table_1.Term_ID,
+        table_1.Channel, table_1.Campaign_ID, table_1.Ad_Group_ID, table_1.Ad_Creative_ID, table_1.Term_ID,
         table_1.Device_Model, table_1.Device_Type, table_1.Platform, table_1.Client_IP_Country_Code, table_1.Client_IP_Subdivision, table_1.Client_IP_City, 
         table_1.Is_Re_engagement, table_1.Is_First_Event_per_User_ID, table_1.Is_First_Event_per_Device_ID,
         table_1.Is_First_Target_Event_per_Device, table_1.Target_Event_Timestamp, table_1.Target_Event_Category,
@@ -316,7 +329,7 @@ BEGIN
         table_1.* EXCEPT (
           Event_Date, Event_Datetime, 
           Airbridge_Device_ID, Airbridge_Device_ID_Type, User_ID,
-          Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
+          Channel, Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
           Device_Model, Device_Type, Platform, Client_IP_Country_Code, Client_IP_Subdivision, Client_IP_City, 
           Is_Re_engagement, Is_First_Event_per_User_ID, Is_First_Event_per_Device_ID,
           Is_First_Target_Event_per_Device, Target_Event_Timestamp, Target_Event_Category,
@@ -347,14 +360,14 @@ BEGIN
       Event_Date, Airbridge_Device_ID, Airbridge_Device_ID_Type, 
       Device_Model, Device_Type, Platform, Client_IP_Country_Code, Client_IP_Subdivision, Client_IP_City, 
       User_ID, 
-      Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
+      Channel, Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
       Is_Re_engagement, Is_First_Event_per_User_ID, Is_First_Event_per_Device_ID,
       Is_First_Target_Event_per_Device, Target_Event_Timestamp, Target_Event_Category,
       Event_Datetime, Event_Category, Event_Label, Event_Action, Event_Value,
       merged_table.* EXCEPT (
         Event_Date, Airbridge_Device_ID, Airbridge_Device_ID_Type, 
         Device_Model, Device_Type, Platform, Client_IP_Country_Code, Client_IP_Subdivision, Client_IP_City, 
-        User_ID, Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
+        User_ID, Channel, Campaign_ID, Ad_Group_ID, Ad_Creative_ID, Term_ID,
         Is_Re_engagement, Is_First_Event_per_User_ID, Is_First_Event_per_Device_ID,
         Is_First_Target_Event_per_Device, Target_Event_Timestamp, Target_Event_Category,
         Event_Datetime, Event_Category, Event_Label, Event_Action, Event_Value
@@ -373,11 +386,12 @@ BEGIN
 
   fin_table AS(
     SELECT 
-      Event_Date, Airbridge_Device_ID, Airbridge_Device_ID_Type,
+      Event_Date, Airbridge_Device_ID,Airbridge_Device_ID_Type,
+      min(UUID) AS User_ID,  min(Platform) AS Platform,
       # -- 기타 정보 구조체 생성 -- #
       STRUCT(
         min(Device_Model) as Device_Model ,min(Device_Type) as Device_Type ,min(Platform) as Platform ,min(Client_IP_Country_Code) as Client_IP_Country_Code ,min(Client_IP_Subdivision) as Client_IP_Subdivision ,min(Client_IP_City) as Client_IP_City
-        ,min(Campaign_ID) as Campaign_ID ,min(Ad_Group_ID) as Ad_Group_ID ,min(Ad_Creative_ID) as Ad_Creative_ID ,min(Term_ID) as Term_ID
+        ,min(Channel) as Channel ,min(Campaign_ID) as Campaign_ID ,min(Ad_Group_ID) as Ad_Group_ID ,min(Ad_Creative_ID) as Ad_Creative_ID ,min(Term_ID) as Term_ID
         ,min(Is_Re_engagement) as Is_Re_engagement, min(Is_First_Event_per_User_ID) as Is_First_Event_per_User_ID, min(Is_First_Event_per_Device_ID) as Is_First_Event_per_Device_ID
         ,min(Is_First_Target_Event_per_Device) as Is_First_Target_Event_per_Device
         ,min(Target_Event_Timestamp) as Target_Event_Timestamp, min(Target_Event_Category) as Target_Event_Category
@@ -400,16 +414,21 @@ BEGIN
             )
           ) as u,
           
-          Event_Category, Event_Label, Event_Action, SUM(Event_Value) AS Event_Value_Sum, COUNT(*) AS Event_Count,
+          MIN(User_ID) as UUID, Event_Category, Event_Label, Event_Action, SUM(Event_Value) AS Event_Value_Sum, COUNT(*) AS Event_Count,
           min(Device_Model) as Device_Model ,min(Device_Type) as Device_Type ,min(Platform) as Platform ,min(Client_IP_Country_Code) as Client_IP_Country_Code ,min(Client_IP_Subdivision) as Client_IP_Subdivision ,min(Client_IP_City) as Client_IP_City
-          ,min(Campaign_ID) as Campaign_ID ,min(Ad_Group_ID) as Ad_Group_ID ,min(Ad_Creative_ID) as Ad_Creative_ID ,min(Term_ID) as Term_ID
+          ,min(Channel) as Channel, min(Campaign_ID) as Campaign_ID ,min(Ad_Group_ID) as Ad_Group_ID ,min(Ad_Creative_ID) as Ad_Creative_ID ,min(Term_ID) as Term_ID
           ,min(Is_Re_engagement) as Is_Re_engagement, min(Is_First_Event_per_User_ID) as Is_First_Event_per_User_ID, min(Is_First_Event_per_Device_ID) as Is_First_Event_per_Device_ID
           ,min(Is_First_Target_Event_per_Device) as Is_First_Target_Event_per_Device
           ,min(Target_Event_Timestamp) as Target_Event_Timestamp, min(Target_Event_Category) as Target_Event_Category,
 
           # -- 이벤트 상세 구조체 생성. 2중 구조체 중 inner에 해당 -- #
           ARRAY_AGG(STRUCT( 
-            Event_Datetime as Timestamp ,Event_Label as Label, Event_Action as Action, Event_Value as Value, %s, products_str
+            Event_Datetime as Timestamp ,Event_Label as Label, Event_Action as Action, Event_Value as Value, commission, param, challenge_id, campaignType, 
+            campaignName, gettableCash, quantity, score, position, scheduleID, type, achievementID, rate, price, tester, incentive_product_name, list_order, 
+            contributionMargin, sharedChannel, listID, transactionID, brandID, transactionPairedEventCategory, originalContributionMargin, productListID, 
+            datetime, place, name, totalQuantity, productID, transactionType, 
+            products_str,
+            query, isRenewal
           )) AS d
       FROM order_table
       GROUP BY Event_Date, Airbridge_Device_ID, Airbridge_Device_ID_Type, Event_Category, Event_Label, Event_Action
@@ -419,9 +438,6 @@ BEGIN
   
   select * from fin_table
   
-  # -- 선언한 변수 사용 -- #
-  """, key_list, struct_fields); 
+  
+  ''');
 END;
-
-
-
