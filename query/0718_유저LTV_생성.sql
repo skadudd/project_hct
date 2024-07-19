@@ -4,25 +4,35 @@ DECLARE CP_FIN_DATE DATE;
 SET FIN_DATE =  DATE_SUB(CURRENT_DATE(),INTERVAL 1 DAY);
 SET CP_FIN_DATE =  DATE_SUB(CURRENT_DATE(),INTERVAL 2 DAY);
 
-with user_app AS (
+WITH user_app AS (
   SELECT 
-  FROM(SELECT 
-    u.User_ID, max(d.datetime) as Joined_Time, max(d.contributionMargin) as Cum_Cash, Max(d.score) as Cur_Cash, max(d.scheduleID) as Mkt_Agreed, 
-    Max(d.sharedChannel) as Invicode_Owned, max(d.achievementID) as Invicode_Typed,  Event_Category, d.Label, d.Action, Event_Date,
+    u.User_ID AS User_ID, MAX(d.datetime) AS Joined_Time, MAX(d.contributionMargin) AS Cum_Cash, MAX(d.score) AS Cur_Cash, 
+    MAX(d.scheduleID) AS Mkt_Agreed, MAX(d.sharedChannel) AS Invicode_Owned, MAX(d.achievementID) AS Invicode_Typed,  
+    Event_Category, 
+    d.Label AS Label, 
+    Event_Date,
+    CASE
+      WHEN Event_Category = "view_get__reward_done (App)" AND d.Label IN ("매일버튼누르기챌린지", "소득받기") THEN 'merged'
+      WHEN Event_Category = "Spend Credits (App)" THEN 'merged'
+      ELSE d.Action
+    END AS Action,
     SUM(CASE 
-      # 재화 지표 정리
+      -- 재화 지표 정리
       WHEN Event_Category = "view_get__reward_done (App)" AND d.Action = "보너스봉투" THEN ABS(d.Value) - 20
-      WHEN Event_Category IN ("Order Complete (App)", "Order Cancel (App)") THEN round(d.Value * 0.044)
+      WHEN Event_Category IN ("Order Complete (App)", "Order Cancel (App)") THEN ROUND(d.Value * 0.044)
       ELSE d.Value
-    END) AS Value, Count(*) AS Count
+    END) AS Value, 
+    COUNT(*) AS Count
   FROM
-      `ballosodeuk.airbridge_mart.app_keyfeatures` ,UNNEST(e) as e, UNNEST(d) as d, UNNEST(u) as u
+    `ballosodeuk.airbridge_mart.app_keyfeatures`, UNNEST(e) AS e, UNNEST(d) AS d, UNNEST(u) AS u
   WHERE 
-    (Event_Date Between FIN_DATE AND FIN_DATE)
+    Event_Date BETWEEN FIN_DATE AND FIN_DATE
     AND Event_Category IN (
-    'Open (App)', 'Sign-in (App)', 'view_get__reward_done (App)', 'tap_get__reward_done (App)' , 'Ad Click (App)', 'Order Complete (App)', 'Order Cancel (App)', 'Spend Credits (App)')
+      'Open (App)', 'Sign-in (App)', 'view_get__reward_done (App)', 'tap_get__reward_done (App)', 
+      'Ad Click (App)', 'Order Complete (App)', 'Order Cancel (App)', 'Spend Credits (App)'
+    )
   GROUP BY
-    u.User_ID, Event_Date, Event_Category, d.Label, d.Action) AS raw
+    u.User_ID, Event_Date, Event_Category, d.Label, Action
 )
 
 ,user_app_agg (
