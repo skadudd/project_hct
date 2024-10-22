@@ -2,7 +2,7 @@ with raw as
   (SELECT User_ID, Event_Date, Event_Category, Event_Action, Event_Value, 
     cast( replace(json_extract(Semantic_Event_Properties, '$.score'),'"','') as int64) as score
   FROM `ballosodeuk.airbridge_warehouse.user_event_log`,unnest(event_detail)
-  WHERE Event_Date between "2024-03-01" and "2024-10-21" 
+  WHERE Event_Date between "2024-05-03" and "2024-10-21" #5/3 부터 로그인 properties 수집
   and Event_Category in ('Spend Credits (App)', 'Sign-in (App)')
   )
 
