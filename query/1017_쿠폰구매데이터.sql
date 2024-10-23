@@ -2,7 +2,7 @@ with raw as
   (SELECT User_ID, Event_Date, Event_Category, Event_Action, Event_Value, 
     cast( replace(json_extract(Semantic_Event_Properties, '$.score'),'"','') as int64) as score
   FROM `ballosodeuk.airbridge_warehouse.user_event_log`,unnest(event_detail)
-  WHERE Event_Date between "2024-05-03" and "2024-10-21" #5/3 부터 로그인 properties 수집
+  WHERE Event_Date between "2024-05-03" and "2024-10-22" #5/3 부터 로그인 properties 수집
   and Event_Category in ('Spend Credits (App)', 'Sign-in (App)')
   )
 
@@ -118,6 +118,36 @@ with raw as
       
 )
 
+
+#구매 주기
+,spending_gap as (
+  SELECT User_ID, Event_Date, LAG(Event_Date) Over (Partition by User_ID ORDER BY Event_Date) as Prev_Event_Date
+  FROM
+    (
+      select User_ID, Event_Date
+      from
+        (select User_ID, Event_Date
+        from raw
+        where Event_Category = 'Spend Credits (App)'
+        )
+      group by User_ID, Event_Date
+    )
+  )
+
+,avg_spending_intervals as (
+  select User_ID, avg(Interval_Days) as Interval_Days
+  from
+    (
+      SELECT User_ID, 
+        case 
+          when Prev_Event_Date is not Null then Date_Diff(Event_Date, Prev_Event_Date, Day) 
+          else 0.0 end as Interval_Days
+      FROM spending_gap
+    )
+  group by User_ID
+)
+
+
 ,Spending_Power_Stats as # -> 쿠폰 구매 시 재산 대비 소진율 평균
   (select Mean, 
     Mean - (1.96 * std / sqrt(n)) as Lower_CI,
@@ -127,10 +157,10 @@ with raw as
     from avg_spend_ratio)
 )
 
-select a.User_ID, b.* except (User_ID), a.* except (User_ID)
+select a.User_ID, b.* except (User_ID), c.Interval_Days, a.* except (User_ID)
 from result_pivotrange_entropy a
-left join avg_spend_ratio b
-  on a.User_ID = b.User_ID
+left join avg_spend_ratio b on a.User_ID = b.User_ID
+left join avg_spending_intervals c on c.User_ID = a.User_ID
 
 -- select *
 -- from result_pivotrange_entropy
