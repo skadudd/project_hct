@@ -95,7 +95,7 @@ with daily_net_amount as
   )
 
 select 
-  register_dt, user_id, member_no, gender, age          
+  register_dt, user_id, member_no       
   ,pre_cash - COALESCE(SUM(exchange_cash_rate) OVER (
   PARTITION BY member_no
   ORDER BY register_dt
