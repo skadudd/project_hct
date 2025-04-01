@@ -1,0 +1,14 @@
+.xlsx
+.csv
+.pkl
+.json
+.jsonl
+.jsonl.gz
+.jsonl.gz.part
+.parquet
+.parquet.gzip
+.parquet.gzip.part
+.parquet.gzip.part.1
+.parquet.gzip.part.2
+.parquet.gzip.part.3
+.parquet.gzip.part.4
