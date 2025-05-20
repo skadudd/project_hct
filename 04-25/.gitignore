@@ -12,3 +12,17 @@
 .parquet.gzip.part.2
 .parquet.gzip.part.3
 .parquet.gzip.part.4
+**/*.xlsx
+**/*.csv
+**/*.pkl
+**/*.json
+**/*.jsonl
+**/*.jsonl.gz
+**/*.jsonl.gz.part
+**/*.zip
+**/*.gz
+**/*.tar
+**/*.tar.gz
+**/*.tar.gz.part
+**/*.tar.gz.part.1
+**/*.tar.gz.part.2
