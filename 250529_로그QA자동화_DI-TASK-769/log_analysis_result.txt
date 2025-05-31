@@ -1,0 +1,49 @@
+=== 총 4개의 로그 발견 ===
+
+============================================================
+로그 #1 - N/A
+============================================================
+URL: life-dev.hectoinnovation.co.kr/main
+총 파라미터 수: 5
+--------------------------------------------------
+channel              : Rround
+page_url             : https://life-dev.hectoinnovation.co.kr/main
+page_id              : life-dev/main
+act_type             : impression
+banner_text          : 애국가
+
+============================================================
+로그 #2 - N/A
+============================================================
+URL: life-dev.hectoinnovation.co.kr/main
+총 파라미터 수: 4
+--------------------------------------------------
+channel              : Rround
+page_url             : https://life-dev.hectoinnovation.co.kr/main
+page_id              : life-dev/main
+act_type             : pageview
+
+============================================================
+로그 #3 - N/A
+============================================================
+URL: life-dev.hectoinnovation.co.kr/myPage
+총 파라미터 수: 4
+--------------------------------------------------
+channel              : Rround
+page_url             : https://life-dev.hectoinnovation.co.kr/myPage
+page_id              : life-dev/myPage
+act_type             : pageview
+
+============================================================
+로그 #4 - N/A
+============================================================
+URL: life-dev.hectoinnovation.co.kr/main
+총 파라미터 수: 6
+--------------------------------------------------
+channel              : Rround
+page_url             : https://life-dev.hectoinnovation.co.kr/main
+page_id              : life-dev/main
+act_type             : click
+click_text           : 라운드로또
+click_type           : 퀵버튼
+

@@ -1,0 +1,4 @@
+{"REQUEST":"https://life-dev.hectoinnovation.co.kr/main?channel\\u003dRround\\u0026page_url\\u003dhttps://life-dev.hectoinnovation.co.kr/main\\u0026page_id\\u003dlife-dev/main\\u0026act_type\\u003dimpression\\u0026banner_text\\u003d애국가"}
+{"REQUEST":"https://life-dev.hectoinnovation.co.kr/main?channel\\u003dRround\\u0026page_url\\u003dhttps://life-dev.hectoinnovation.co.kr/main\\u0026page_id\\u003dlife-dev/main\\u0026act_type\\u003dpageview"}
+{"REQUEST":"https://life-dev.hectoinnovation.co.kr/myPage?channel\\u003dRround\\u0026page_url\\u003dhttps://life-dev.hectoinnovation.co.kr/myPage\\u0026page_id\\u003dlife-dev/myPage\\u0026act_type\\u003dpageview"}
+{"REQUEST":"https://life-dev.hectoinnovation.co.kr/main?channel\\u003dRround\\u0026page_url\\u003dhttps://life-dev.hectoinnovation.co.kr/main\\u0026page_id\\u003dlife-dev/main\\u0026act_type\\u003dclick\\u0026click_text\\u003d라운드로또\\u0026click_type\\u003d퀵버튼"}
